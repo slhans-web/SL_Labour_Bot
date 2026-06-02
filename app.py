@@ -98,13 +98,20 @@ def api_calc_ot():
 # Endpoint: AI Assistant Chat
 @app.route('/api/chat', methods=['POST'])
 def api_chat():
-    data = request.get_json() or {}
-    message = data.get('message', '')
-    if not message:
-        return jsonify({"error": "Message is empty"}), 400
-    
+    data = request.get_json()
+
+    user_message = data.get("message", "").strip()
+
+    if not user_message:
+        return jsonify({
+            "error": "Message is empty"
+        }), 400
+
     response = ai_assistant.ask_ai_assistant(user_message)
-    return jsonify({"response": response})
+
+    return jsonify({
+        "response": response
+    })
 
 # Endpoint: Fetch Wages Boards
 @app.route('/api/wages_boards', methods=['GET'])
