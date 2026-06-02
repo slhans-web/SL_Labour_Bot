@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labor Officer Portal & AI Assistant</title>
+    
+    <!-- PWA configuration -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/static/icon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-scale-balanced logo-icon"></i>
+                <div class="logo-text">
+                    <span class="logo-title">Labor Portal</span>
+                    <span class="logo-subtitle">Sri Lanka</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <button class="menu-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span data-trans="menu_dashboard">Dashboard</span>
+                </button>
+                <button class="menu-item" data-tab="calculators">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span data-trans="menu_calculators">Calculators</span>
+                </button>
+                <button class="menu-item" data-tab="wages">
+                    <i class="fa-solid fa-scroll"></i>
+                    <span data-trans="menu_wages">Wages Boards</span>
+                </button>
+                <button class="menu-item" data-tab="ai-chat">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    <span data-trans="menu_ai">AI Assistant</span>
+                </button>
+                <button class="menu-item" data-tab="faq">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span data-trans="menu_laws">Laws & FAQs</span>
+                </button>
+                <button class="menu-item" data-tab="directory">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span data-trans="menu_directory">Labor Offices</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="lang-toggle-btn" class="lang-btn">
+                    <i class="fa-solid fa-language"></i>
+                    <span id="lang-label">සිංහල</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Mobile Header / Top Bar -->
+            <header class="top-bar">
+                <button id="mobile-menu-toggle" class="mobile-toggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="top-bar-title" data-trans="app_title">Labor Officer Assistant</div>
+                <button id="mobile-lang-toggle" class="lang-btn-mobile">SI</button>
+            </header>
+
+            <!-- TABS CONTENT -->
+            
+            <!-- 1. DASHBOARD TAB -->
+            <section id="tab-dashboard" class="tab-pane active">
+                <div class="hero-section">
+                    <h1 class="welcome-heading"><span data-trans="welcome_back">Welcome, Labor Officer</span> 👋</h1>
+                    <p class="welcome-lead" data-trans="welcome_sub">Access calculators, Wages Board summaries, and AI drafting tools on the go.</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card action-card" data-tab-link="calculators">
+                        <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+                        <h3 data-trans="menu_calculators">Calculators</h3>
+                        <p data-trans="dash_calc_desc">Calculate EPF, ETF, Gratuity, and Overtime instantly.</p>
+                        <i class="fa-solid fa-arrow-right arrow-icon"></i>
+                    </div>
+                    <div class="dashboard-card action-card" data-tab-link="wages">
+                        <div class="card-icon"><i class="fa-solid fa-scroll"></i></div>
+                        <h3 data-trans="menu_wages">Wages Boards</h3>
+                        <p data-trans="dash_wages_desc">Access standard rates for Security, Tea, Transport, and Engineering trades.</p>
+                        <i class="fa-solid fa-arrow-right arrow-icon"></i>
+                    </div>
+                    <div class="dashboard-card action-card" data-tab-link="ai-chat">
+                        <div class="card-icon"><i class="fa-solid fa-comment-dots"></i></div>
+                        <h3 data-trans="menu_ai">AI Assistant</h3>
+                        <p data-trans="dash_ai_desc">Draft formal notice letters, warning letters, and compile inspection reports instantly.</p>
+                        <i class="fa-solid fa-arrow-right arrow-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Recent Activity/Calculations from DB -->
+                <div class="history-section">
+                    <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> <span data-trans="recent_calcs">Recent Web Calculations</span></h2>
+                    <div id="recent-calculations-list" class="history-list">
+                        <!-- Loaded dynamically -->
+                        <div class="loading-placeholder">Loading calculations...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CALCULATORS TAB -->
+            <section id="tab-calculators" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-trans="menu_calculators">Calculators Hub</h2>
+                    <p data-trans="calc_hub_sub">Perform statutory calculations based on Sri Lankan Labor regulations.</p>
+                </div>
+                
+                <!-- Calculator Choice Menu -->
+                <div class="calc-switcher">
+                    <button class="calc-tab active" data-calc="epf">EPF & ETF</button>
+                    <button class="calc-tab" data-calc="gratuity">Gratuity</button>
+                    <button class="calc-tab" data-calc="ot">Overtime (OT)</button>
+                </div>
+
+                <!-- A. EPF & ETF Calculator -->
+                <div id="calc-epf" class="calc-form-container active">
+                    <div class="calc-grid">
+                        <div class="calc-inputs-card">
+                            <h3 data-trans="epf_calc_title">EPF/ETF Input</h3>
+                            <form id="epf-form" class="portal-form">
+                                <div class="form-group">
+                                    <label for="epf-basic" data-trans="label_basic">Monthly Basic Salary (LKR)</label>
+                                    <input type="number" id="epf-basic" placeholder="e.g. 50000" required min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="epf-allowance" data-trans="label_allowance">Fixed Allowances (LKR)</label>
+                                    <input type="number" id="epf-allowance" placeholder="e.g. 10000" min="0" value="0">
+                                </div>
+                                <button type="submit" class="submit-btn" data-trans="btn_calculate">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="calc-results-card">
+                            <h3 data-trans="calc_results">Results</h3>
+                            <div id="epf-results-placeholder" class="results-placeholder" data-trans="results_placeholder">Enter details to see calculations.</div>
+                            <div id="epf-results-display" class="results-display">
+                                <div class="result-row total-row">
+                                    <span data-trans="res_total_earnings">Total Earnings</span>
+                                    <span id="res-epf-earnings" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="result-divider"></div>
+                                <div class="result-row highlight">
+                                    <span data-trans="res_employee_epf">Employee EPF (8%)</span>
+                                    <span id="res-epf-employee" class="res-val font-accent">LKR 0.00</span>
+                                </div>
+                                <div class="result-row">
+                                    <span data-trans="res_employer_epf">Employer EPF (12%)</span>
+                                    <span id="res-epf-employer" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="result-row total">
+                                    <span data-trans="res_total_epf">Total EPF (20%)</span>
+                                    <span id="res-epf-total" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="result-row highlight">
+                                    <span data-trans="res_employer_etf">Employer ETF (3%)</span>
+                                    <span id="res-etf-employer" class="res-val font-accent">LKR 0.00</span>
+                                </div>
+                                <div class="result-divider"></div>
+                                <div class="result-row net-row">
+                                    <span data-trans="res_net_salary">Net Salary Base</span>
+                                    <span id="res-epf-net" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="legal-notice-card mt-4">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    <p data-trans="epf_notes">The employer must bear the 12% EPF and 3% ETF entirely, and only 8% can be deducted from the employee's salary.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B. Gratuity Calculator -->
+                <div id="calc-gratuity" class="calc-form-container">
+                    <div class="calc-grid">
+                        <div class="calc-inputs-card">
+                            <h3 data-trans="gratuity_calc_title">Gratuity Input</h3>
+                            <form id="gratuity-form" class="portal-form">
+                                <div class="form-group">
+                                    <label for="gratuity-basic" data-trans="label_last_basic">Last Drawn Basic Salary (LKR)</label>
+                                    <input type="number" id="gratuity-basic" placeholder="e.g. 60000" required min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gratuity-years" data-trans="label_service">Completed Years of Service</label>
+                                    <input type="number" id="gratuity-years" placeholder="e.g. 7" required min="0">
+                                </div>
+                                <button type="submit" class="submit-btn" data-trans="btn_calculate">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="calc-results-card">
+                            <h3 data-trans="calc_results">Results</h3>
+                            <div id="gratuity-results-placeholder" class="results-placeholder" data-trans="results_placeholder">Enter details to see calculations.</div>
+                            <div id="gratuity-results-display" class="results-display">
+                                <div class="result-row font-large">
+                                    <span data-trans="res_gratuity_eligible">Eligibility</span>
+                                    <span id="res-gratuity-eligibility" class="res-val">Yes</span>
+                                </div>
+                                <div class="result-divider"></div>
+                                <div class="result-row highlight font-large">
+                                    <span data-trans="res_gratuity_due">Gratuity Amount Due</span>
+                                    <span id="res-gratuity-amount" class="res-val font-accent">LKR 0.00</span>
+                                </div>
+                                <div class="legal-notice-card mt-4">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    <p data-trans="gratuity_notes">Under the Gratuity Act, employees with 5 or more years of service in firms with 15 or more workmen are entitled to a lump-sum payment equivalent to half-month basic salary for each completed year of service.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- C. Overtime Calculator -->
+                <div id="calc-ot" class="calc-form-container">
+                    <div class="calc-grid">
+                        <div class="calc-inputs-card">
+                            <h3 data-trans="ot_calc_title">Overtime Input</h3>
+                            <form id="ot-form" class="portal-form">
+                                <div class="form-group">
+                                    <label for="ot-basic" data-trans="label_basic">Monthly Basic Salary (LKR)</label>
+                                    <input type="number" id="ot-basic" placeholder="e.g. 48000" required min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ot-hours" data-trans="label_ot_hours">Overtime Hours Worked</label>
+                                    <input type="number" id="ot-hours" placeholder="e.g. 15" required min="0" step="0.5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ot-divisor" data-trans="label_divisor">Hours Divisor (Default 240)</label>
+                                    <input type="number" id="ot-divisor" value="240" required min="1">
+                                </div>
+                                <button type="submit" class="submit-btn" data-trans="btn_calculate">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="calc-results-card">
+                            <h3 data-trans="calc_results">Results</h3>
+                            <div id="ot-results-placeholder" class="results-placeholder" data-trans="results_placeholder">Enter details to see calculations.</div>
+                            <div id="ot-results-display" class="results-display">
+                                <div class="result-row">
+                                    <span data-trans="res_hourly_rate">Ordinary Hourly Rate</span>
+                                    <span id="res-ot-hourly" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="result-row">
+                                    <span data-trans="res_ot_hourly">OT Hourly Rate (1.5x)</span>
+                                    <span id="res-ot-hourly-rate" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="result-divider"></div>
+                                <div class="result-row highlight font-large">
+                                    <span data-trans="res_ot_pay">Total Overtime Pay</span>
+                                    <span id="res-ot-pay" class="res-val font-accent">LKR 0.00</span>
+                                </div>
+                                <div class="result-row total-row mt-4">
+                                    <span data-trans="res_total_salary">Total (Basic + OT)</span>
+                                    <span id="res-ot-total" class="res-val">LKR 0.00</span>
+                                </div>
+                                <div class="legal-notice-card mt-4">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    <p data-trans="ot_notes">For Shop and Office employees, standard OT is calculated using a 240 divisor at a 1.5x multiplier. Weekly overtime limit is 12 hours.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. WAGES BOARDS TAB -->
+            <section id="tab-wages" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-trans="wages_boards_title">Wages Board Determinations</h2>
+                    <p data-trans="wages_boards_sub">Statutory minimum salaries, weekly holidays, and working conditions for key Sri Lankan industries.</p>
+                </div>
+                
+                <div class="search-box-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="wages-search-input" placeholder="Search Wages Boards..." class="search-input">
+                </div>
+
+                <div id="wages-boards-list" class="wages-grid">
+                    <!-- Dynamic load -->
+                    <div class="loading-placeholder">Loading Wages Boards data...</div>
+                </div>
+            </section>
+
+            <!-- 4. AI ASSISTANT CHAT TAB -->
+            <section id="tab-ai-chat" class="tab-pane">
+                <div class="ai-chat-layout">
+                    <!-- Sidebar Instructions -->
+                    <div class="ai-instructions">
+                        <h3 data-trans="ai_assistant_title"><i class="fa-solid fa-sparkles"></i> AI Labor Expert</h3>
+                        <p data-trans="ai_intro">Draft letters, warnings, memos, checklists, or get instant legally-grounded answers to any complex dispute scenario.</p>
+                        
+                        <div class="example-prompts-container">
+                            <span class="example-header" data-trans="try_asking">Try asking:</span>
+                            <div class="prompt-examples">
+                                <button class="example-chip">වැටුප් නොගෙවූ සේවකයෙකුගේ පැමිණිල්ලක් මත සේවා යෝජකයාට ලිවිය යුතු නිල දැනුම්දීමේ ලිපියක් සිංහලෙන් සකස් කරන්න.</button>
+                                <button class="example-chip">මාසික කර්මාන්තශාලා පරීක්ෂාව සඳහා අවශ්‍ය කරුණු 15ක් ඇතුළත් චෙක්ලිස්ට් එකක් සිංහලෙන් හදන්න.</button>
+                                <button class="example-chip">සේවකයෙක් මාස 6ක් වැඩකරලා අනවශ්‍ය ලෙස නෙරපා හැරියා. ඔහුට හිමිකම් පෑ හැකි දේවල් මොනවාද?</button>
+                                <button class="example-chip">රබර් කර්මාන්තශාලාවක කම්කරුවන් 50කගේ අතිකාල වේතන නොගෙවීම සම්බන්ධ බේරුම්කරණයකදී ඉදිරිපත් කළ හැකි තර්ක 5ක් සිංහලෙන් ලියන්න.</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Console -->
+                    <div class="chat-console">
+                        <div id="chat-messages-container" class="chat-messages">
+                            <!-- Welcome bubble -->
+                            <div class="message-bubble system">
+                                <div class="bubble-header"><i class="fa-solid fa-robot"></i> <span data-trans="ai_name">AI Labor Assistant</span></div>
+                                <div class="bubble-content" data-trans="ai_welcome">
+                                    Hello! I am your AI Labor Assistant. Type any question, dispute case, or request for letter drafting/inspection checklists. I will generate professional, legally-grounded compliance answers based on Sri Lankan laws in Sinhala or English!
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Thinking Placeholder -->
+                        <div id="chat-thinking-indicator" class="thinking-bubble">
+                            <div class="dots-animation">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span data-trans="ai_thinking">AI is thinking...</span>
+                        </div>
+                        
+                        <!-- Chat Input Form -->
+                        <form id="chat-form" class="chat-input-bar">
+                            <textarea id="chat-input" placeholder="Type your query here..." required></textarea>
+                            <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. LAWS & FAQS TAB -->
+            <section id="tab-faq" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-trans="menu_laws">Labor Laws & FAQs</h2>
+                    <p data-trans="faq_subtitle">Quick reference on standard labor law topics including EPF/ETF, leave policies, and maternity benefits.</p>
+                </div>
+                
+                <div class="faq-container">
+                    <div id="faq-list" class="faq-accordions">
+                        <!-- Loaded dynamically -->
+                        <div class="loading-placeholder">Loading FAQs...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. LABOR OFFICES DIRECTORY -->
+            <section id="tab-directory" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-trans="menu_directory">Labor Offices Directory</h2>
+                    <p data-trans="directory_sub">Find phone numbers and addresses for the Department of Labour Head Office and District branches.</p>
+                </div>
+                
+                <div class="search-box-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="offices-search-input" placeholder="Search offices..." class="search-input">
+                </div>
+
+                <div id="offices-list" class="offices-grid">
+                    <!-- Dynamic load -->
+                    <div class="loading-placeholder">Loading contact directory...</div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <nav class="mobile-nav-bar">
+        <button class="mobile-nav-item active" data-tab="dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+            <span data-trans="menu_dashboard_short">Home</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="calculators">
+            <i class="fa-solid fa-calculator"></i>
+            <span data-trans="menu_calculators_short">Calcs</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="wages">
+            <i class="fa-solid fa-scroll"></i>
+            <span data-trans="menu_wages_short">Wages</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="ai-chat">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span data-trans="menu_ai_short">AI Chat</span>
+        </button>
+        <button class="mobile-nav-item" data-tab="faq">
+            <i class="fa-solid fa-book-open"></i>
+            <span data-trans="menu_laws_short">FAQs</span>
+        </button>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="/static/js/main.js"></script>
+    <script>
+        // Register PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+</body>
+</html>
