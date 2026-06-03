@@ -526,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // B. Labour Offices Directory Fetch & Rendering
     async function loadLabourOffices() {
         try {
-            const res = await fetch('/api/Labour_offices');
+            const res = await fetch('/api/labor_offices');
             officesData = await res.json();
             renderLabourOffices();
         } catch (err) {
