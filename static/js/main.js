@@ -542,7 +542,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const filtered = officesData.filter(o => {
             const name = (currentLang === 'si') ? o.name_si : o.name_en;
-            return name.toLowerCase().includes(filter.toLowerCase());
+            const address = (currentLang === 'si') ? o.address_si : o.address_en;
+            return name.toLowerCase().includes(filter.toLowerCase()) || 
+                   address.toLowerCase().includes(filter.toLowerCase());
         });
 
         if (filtered.length === 0) {
@@ -550,26 +552,79 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Categorize
+        const headAndColombo = [];
+        const districts = [];
+        const subs = [];
+
         filtered.forEach(o => {
-            const name = (currentLang === 'si') ? o.name_si : o.name_en;
-            const address = (currentLang === 'si') ? o.address_si : o.address_en;
+            const nameEn = o.name_en.toLowerCase();
+            const nameSi = o.name_si;
             
-            const card = document.createElement('div');
-            card.className = 'office-card';
-            
-            card.innerHTML = `
-                <h3>${name}</h3>
-                <div class="office-info">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>${address}</span>
-                </div>
-                <div class="office-info">
-                    <i class="fa-solid fa-phone"></i>
-                    <span>${o.phone}</span>
-                </div>
-            `;
-            container.appendChild(card);
+            if (nameEn.includes("head office") || nameEn.includes("colombo") || nameSi.includes("ප්‍රධාන කාර්යාලය") || nameSi.includes("කොළඹ")) {
+                headAndColombo.push(o);
+            } else if (nameEn.includes("sub") || nameSi.includes("උප")) {
+                subs.push(o);
+            } else {
+                districts.push(o);
+            }
         });
+
+        // Helper to render a group
+        function renderGroup(titleSi, titleEn, list) {
+            if (list.length === 0) return;
+
+            const section = document.createElement('div');
+            section.className = 'office-section';
+
+            const heading = document.createElement('h3');
+            heading.className = 'office-section-title';
+            heading.textContent = (currentLang === 'si') ? titleSi : titleEn;
+            section.appendChild(heading);
+
+            const grid = document.createElement('div');
+            grid.className = 'offices-grid';
+
+            list.forEach(o => {
+                const name = (currentLang === 'si') ? o.name_si : o.name_en;
+                const address = (currentLang === 'si') ? o.address_si : o.address_en;
+                
+                const card = document.createElement('div');
+                card.className = 'office-card';
+                card.innerHTML = `
+                    <h3>${name}</h3>
+                    <div class="office-info">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>${address}</span>
+                    </div>
+                    <div class="office-info">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>${o.phone}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            section.appendChild(grid);
+            container.appendChild(section);
+        }
+
+        // Render groups in order
+        renderGroup(
+            "ප්‍රධාන කාර්යාලය සහ කොළඹ කාර්යාල", 
+            "Head Office & Colombo Offices", 
+            headAndColombo
+        );
+        renderGroup(
+            "දිස්ත්‍රික් කම්කරු කාර්යාල", 
+            "District Labour Offices", 
+            districts
+        );
+        renderGroup(
+            "උප කම්කරු කාර්යාල (Sub-Labour Offices)", 
+            "Sub-Labour Offices", 
+            subs
+        );
     }
 
     // Filter offices by input

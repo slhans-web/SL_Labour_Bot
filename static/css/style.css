@@ -942,6 +942,22 @@ body {
     color: var(--text-secondary);
 }
 
+.office-section {
+    margin-bottom: 40px;
+}
+
+.office-section-title {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    border-left: 4px solid var(--accent-color);
+    padding-left: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* Loading animation placeholders */
 .loading-placeholder {
     color: var(--text-secondary);
