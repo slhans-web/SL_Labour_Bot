@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Labor Officer Assistant - Frontend JavaScript Logic
+   Labour Officer Assistant - Frontend JavaScript Logic
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -78,20 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
             menu_wages: "Wages Boards",
             menu_ai: "AI Assistant",
             menu_laws: "Laws & FAQs",
-            menu_directory: "Labor Offices",
+            menu_directory: "Labour Offices",
             menu_dashboard_short: "Dashboard",
             menu_calculators_short: "Calcs",
             menu_wages_short: "Wages",
             menu_ai_short: "AI Chat",
             menu_laws_short: "FAQs",
-            app_title: "Labor Officer Assistant",
+            app_title: "Labour Officer Assistant",
             welcome_back: "Welcome",
             welcome_sub: "Access calculators, Wages Board summaries, and AI drafting tools on the go.",
             dash_calc_desc: "Calculate EPF, ETF, Gratuity, and Overtime instantly.",
             dash_wages_desc: "Access standard rates for Security, Tea, Transport, and Engineering trades.",
             dash_ai_desc: "Draft formal notice letters, warning letters, and compile inspection reports instantly.",
             recent_calcs: "Recent Web Calculations",
-            calc_hub_sub: "Perform statutory calculations based on Sri Lankan Labor regulations.",
+            calc_hub_sub: "Perform statutory calculations based on Sri Lankan Labour regulations.",
             epf_calc_title: "EPF/ETF Input",
             label_basic: "Monthly Basic Salary (LKR)",
             label_allowance: "Fixed Allowances (LKR)",
@@ -121,13 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ot_notes: "For Shop and Office employees, standard OT is calculated using a 240 divisor at a 1.5x multiplier. Weekly overtime limit is 12 hours.",
             wages_boards_title: "Wages Board Determinations",
             wages_boards_sub: "Statutory minimum salaries, weekly holidays, and working conditions for key Sri Lankan industries.",
-            ai_assistant_title: "AI Labor Expert",
+            ai_assistant_title: "AI Labour Expert",
             ai_intro: "Draft letters, warnings, memos, checklists, or get instant legally-grounded answers to any complex dispute scenario.",
             try_asking: "Try asking:",
-            ai_name: "AI Labor Assistant",
-            ai_welcome: "Hello! I am your AI Labor Assistant. Type any question, dispute case, or request for letter drafting/inspection checklists. I will generate professional, legally-grounded compliance answers based on Sri Lankan laws in Sinhala or English!",
+            ai_name: "AI Labour Assistant",
+            ai_welcome: "Hello! I am your AI Labour Assistant. Type any question, dispute case, or request for letter drafting/inspection checklists. I will generate professional, legally-grounded compliance answers based on Sri Lankan laws in Sinhala or English!",
             ai_thinking: "AI is thinking...",
-            faq_subtitle: "Quick reference on standard labor law topics including EPF/ETF, leave policies, and maternity benefits.",
+            faq_subtitle: "Quick reference on standard Labour law topics including EPF/ETF, leave policies, and maternity benefits.",
             directory_sub: "Find phone numbers and addresses for the Department of Labour Head Office and District branches.",
             eligible_yes: "Eligible for Gratuity",
             eligible_no: "Not eligible (Requires minimum 5 years of service)"
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Re-render components with translated static strings
         renderWagesBoards();
-        renderLaborOffices();
+        renderLabourOffices();
         renderFAQs();
     }
 
@@ -523,18 +523,18 @@ document.addEventListener('DOMContentLoaded', () => {
         renderWagesBoards(e.target.value);
     });
 
-    // B. Labor Offices Directory Fetch & Rendering
-    async function loadLaborOffices() {
+    // B. Labour Offices Directory Fetch & Rendering
+    async function loadLabourOffices() {
         try {
-            const res = await fetch('/api/labor_offices');
+            const res = await fetch('/api/Labour_offices');
             officesData = await res.json();
-            renderLaborOffices();
+            renderLabourOffices();
         } catch (err) {
-            console.error("Failed to load Labor Offices directory: ", err);
+            console.error("Failed to load Labour Offices directory: ", err);
         }
     }
 
-    function renderLaborOffices(filter = '') {
+    function renderLabourOffices(filter = '') {
         const container = document.getElementById('offices-list');
         if (!container) return;
         
@@ -574,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Filter offices by input
     document.getElementById('offices-search-input').addEventListener('input', (e) => {
-        renderLaborOffices(e.target.value);
+        renderLabourOffices(e.target.value);
     });
 
     // C. FAQs Fetch & Rendering
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------- Initializations -----------------
     applyTranslations();
     loadWagesBoards();
-    loadLaborOffices();
+    loadLabourOffices();
     loadFAQs();
     loadCalculationHistory();
 
