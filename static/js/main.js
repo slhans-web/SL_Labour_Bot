@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // ----------------- State Configuration -----------------
-    let currentLang = 'si'; // Default language: Sinhala
+    let currentLang = 'en'; // Default language: English
     let wagesBoardsData = [];
     let officesData = [];
     let faqsData = [];
