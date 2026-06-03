@@ -137,57 +137,231 @@ def seed_data(conn):
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, wages_boards_data)
         
-    # Seed Labor Offices if empty
-    cursor.execute("SELECT COUNT(*) FROM labor_offices")
-    if cursor.fetchone()[0] == 0:
-        labor_offices_data = [
-            (
-                "Department of Labour (Head Office)",
-                "කම්කරු දෙපාර්තමේන්තුව (ප්‍රධාන කාර්යාලය)",
-                "Labour Secretariat, Narahenpita, Colombo 05",
-                "කම්කරු මහ ලේකම් කාර්යාලය, නාරාහේන්පිට, කොළඹ 05",
-                "+94 11 258 5780"
-            ),
-            (
-                "District Labour Office - Colombo North",
-                "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ උතුර",
-                "No. 120, Grandpass Road, Colombo 14",
-                "නො. 120, ග්‍රෑන්ඩ්පාස් පාර, කොළඹ 14",
-                "+94 11 243 4514"
-            ),
-            (
-                "District Labour Office - Colombo South",
-                "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ දකුණ",
-                "No. 94, Kirulapone Avenue, Colombo 05",
-                "නො. 94, කිරුළපන මාවත, කොළඹ 05",
-                "+94 11 251 3241"
-            ),
-            (
-                "District Labour Office - Gampaha",
-                "දිස්ත්‍රික් කම්කරු කාර්යාලය - ගම්පහ",
-                "No. 14, Ja-Ela Road, Gampaha",
-                "නො. 14, ජා-ඇල පාර, ගම්පහ",
-                "+94 33 222 2271"
-            ),
-            (
-                "District Labour Office - Kandy",
-                "දිස්ත්‍රික් කම්කරු කාර්යාලය - මහනුවර",
-                "No. 22, Getambe, Kandy",
-                "නො. 22, ගැටඹේ, මහනුවර",
-                "+94 81 222 2280"
-            ),
-            (
-                "District Labour Office - Galle",
-                "දිස්ත්‍රික් කම්කරු කාර්යාලය - ගාල්ල",
-                "C.M.O. Building, Galle",
-                "C.M.O. ගොඩනැගිල්ල, ගාල්ල",
-                "+94 91 223 4293"
-            )
-        ]
-        cursor.executemany("""
-        INSERT INTO labor_offices (name_en, name_si, address_en, address_si, phone)
-        VALUES (?, ?, ?, ?, ?)
-        """, labor_offices_data)
+    # Seed Labor Offices (Always overwrite to keep the list updated)
+    cursor.execute("DELETE FROM labor_offices")
+    labor_offices_data = [
+        (
+            "Department of Labour (Head Office)",
+            "කම්කරු දෙපාර්තමේන්තුව (ප්‍රධාන කාර්යාලය)",
+            "Labour Secretariat, Narahenpita, Colombo 05",
+            "කම්කරු මහ ලේකම් කාර්යාලය, නාරාහේන්පිට, කොළඹ 05",
+            "+94 11 258 5780"
+        ),
+        (
+            "District Labour Office - Colombo Central",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ මධ්‍යම",
+            "Mehewara Piyesa, Kirula Road, Colombo 05",
+            "මෙහෙවර පියෙස, කිරුළ පාර, කොළඹ 05",
+            "+94 11 210 4891"
+        ),
+        (
+            "District Labour Office - Colombo North",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ උතුර",
+            "No. 120, Grandpass Road, Colombo 14",
+            "නො. 120, ග්‍රෑන්ඩ්පාස් පාර, කොළඹ 14",
+            "+94 11 258 2304"
+        ),
+        (
+            "District Labour Office - Colombo South",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ දකුණ",
+            "No. 94, Kirulapone Avenue, Colombo 05",
+            "නො. 94, කිරුළපන මාවත, කොළඹ 05",
+            "+94 11 236 9082"
+        ),
+        (
+            "District Labour Office - Colombo East",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ නැගෙනහිර",
+            "Mehewara Piyesa, Narahenpita, Colombo 05",
+            "මෙහෙවර පියෙස, නාරාහේන්පිට, කොළඹ 05",
+            "+94 11 210 4888"
+        ),
+        (
+            "District Labour Office - Colombo West",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කොළඹ බටහිර",
+            "Mehewara Piyesa, Narahenpita, Colombo 05",
+            "මෙහෙවර පියෙස, නාරාහේන්පිට, කොළඹ 05",
+            "+94 11 210 4890"
+        ),
+        (
+            "District Labour Office - Gampaha",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - ගම්පහ",
+            "No. 14, Ja-Ela Road, Gampaha",
+            "නො. 14, ජා-ඇල පාර, ගම්පහ",
+            "+94 33 222 2271"
+        ),
+        (
+            "District Labour Office - Kalutara",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කළුතර",
+            "No. 320, Main Street, Kalutara",
+            "නො. 320, ප්‍රධාන පාර, කළුතර",
+            "+94 34 222 2838"
+        ),
+        (
+            "District Labour Office - Kandy (North)",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - මහනුවර (උතුර)",
+            "No. 22, Getambe, Kandy",
+            "නො. 22, ගැටඹේ, මහනුවර",
+            "+94 81 223 3079"
+        ),
+        (
+            "District Labour Office - Kandy (South)",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - මහනුවර (දකුණ)",
+            "No. 24, Getambe, Kandy",
+            "නො. 24, ගැටඹේ, මහනුවර",
+            "+94 81 222 2143"
+        ),
+        (
+            "District Labour Office - Galle",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - ගාල්ල",
+            "C.M.O. Building, Galle",
+            "C.M.O. ගොඩනැගිල්ල, ගාල්ල",
+            "+94 91 223 4293"
+        ),
+        (
+            "District Labour Office - Matara",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - මාතර",
+            "Fort, Matara",
+            "කොටුව, මාතර",
+            "+94 41 222 2291"
+        ),
+        (
+            "District Labour Office - Hambantota",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - හම්බන්තොට",
+            "Government Secretariat, Hambantota",
+            "රාජ්‍ය ලේකම් කාර්යාලය, හම්බන්තොට",
+            "+94 47 222 2366"
+        ),
+        (
+            "District Labour Office - Jaffna",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - යාපනය",
+            "No. 40, Temple Road, Jaffna",
+            "නො. 40, කෝවිල් පාර, යාපනය",
+            "+94 21 222 2375"
+        ),
+        (
+            "District Labour Office - Trincomalee",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - ත්‍රිකුණාමලය",
+            "Inner Harbour Road, Trincomalee",
+            "ඇතුළු වරාය පාර, ත්‍රිකුණාමලය",
+            "+94 26 222 4001"
+        ),
+        (
+            "District Labour Office - Batticaloa",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - මඩකලපුව",
+            "No. 15, Covington Road, Batticaloa",
+            "නො. 15, කොවිංටන් පාර, මඩකලපුව",
+            "+94 65 222 8870"
+        ),
+        (
+            "District Labour Office - Anuradhapura",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - අනුරාධපුරය",
+            "Stage II, Anuradhapura",
+            "පියවර II, අනුරාධපුරය",
+            "+94 25 223 4091"
+        ),
+        (
+            "District Labour Office - Kurunegala",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - කුරුණෑගල",
+            "Government Secretariat, Kurunegala",
+            "රාජ්‍ය ලේකම් කාර්යාලය, කුරුණෑගල",
+            "+94 37 222 3590"
+        ),
+        (
+            "District Labour Office - Badulla",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - බදුල්ල",
+            "No. 12, Keppetipola Road, Badulla",
+            "නො. 12, කැප්පෙටිපොල පාර, බදුල්ල",
+            "+94 55 223 1589"
+        ),
+        (
+            "District Labour Office - Ratnapura",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - රත්නපුරය",
+            "Government Secretariat, Ratnapura",
+            "රාජ්‍ය ලේකම් කාර්යාලය, රත්නපුරය",
+            "+94 45 222 2140"
+        ),
+        (
+            "District Labour Office - Nuwara Eliya",
+            "දිස්ත්‍රික් කම්කරු කාර්යාලය - නුවරඑළිය",
+            "No. 100, Badulla Road, Nuwara Eliya",
+            "නො. 100, බදුල්ල පාර, නුවරඑළිය",
+            "+94 52 222 3809"
+        ),
+        (
+            "Sub Labour Office - Negombo",
+            "උප කම්කරු කාර්යාලය - මීගමුව",
+            "Kotuwa Road, Negombo",
+            "කොටුව පාර, මීගමුව",
+            "+94 31 222 2888"
+        ),
+        (
+            "Sub Labour Office - Chilaw",
+            "උප කම්කරු කාර්යාලය - හලාවත",
+            "Kurunegala Road, Chilaw",
+            "කුරුණෑගල පාර, හලාවත",
+            "+94 32 222 2085"
+        ),
+        (
+            "Sub Labour Office - Hatton",
+            "උප කම්කරු කාර්යාලය - හැටන්",
+            "No. 15, Dimbula Road, Hatton",
+            "නො. 15, දිඹුල පාර, හැටන්",
+            "+94 51 222 2589"
+        ),
+        (
+            "Sub Labour Office - Avissawella",
+            "උප කම්කරු කාර්යාලය - අවිස්සාවේල්ල",
+            "Colombo Road, Avissawella",
+            "කොළඹ පාර, අවිස්සාවේල්ල",
+            "+94 36 222 2241"
+        ),
+        (
+            "Sub Labour Office - Panadura",
+            "උප කම්කරු කාර්යාලය - පානදුර",
+            "No. 14, Arthur V. Dias Mawatha, Panadura",
+            "නො. 14, ආතර් වී දියෙස් මාවත, පානදුර",
+            "+94 38 223 2038"
+        ),
+        (
+            "Sub Labour Office - Ambalangoda",
+            "උප කම්කරු කාර්යාලය - අම්බලන්ගොඩ",
+            "Galle Road, Ambalangoda",
+            "ගාල්ල පාර, අම්බලන්ගොඩ",
+            "+94 91 225 8666"
+        ),
+        (
+            "Sub Labour Office - Beliatta",
+            "උප කම්කරු කාර්යාලය - බෙලිඅත්ත",
+            "Tangalle Road, Beliatta",
+            "තංගල්ල පාර, බෙලිඅත්ත",
+            "+94 47 224 3373"
+        ),
+        (
+            "Sub Labour Office - Dambulla",
+            "උප කම්කරු කාර්යාලය - දඹුල්ල",
+            "Kandy Road, Dambulla",
+            "මහනුවර පාර, දඹුල්ල",
+            "+94 66 228 3965"
+        ),
+        (
+            "Sub Labour Office - Wennappuwa",
+            "උප කම්කරු කාර්යාලය - වෙන්නප්පුව",
+            "Chilaw Road, Wennappuwa",
+            "හලාවත පාර, වෙන්නප්පුව",
+            "+94 31 225 5283"
+        ),
+        (
+            "Sub Labour Office - Kuliyapitiya",
+            "උප කම්කරු කාර්යාලය - කුලියාපිටිය",
+            "Madampe Road, Kuliyapitiya",
+            "මාදම්පේ පාර, කුලියාපිටිය",
+            "+94 37 228 1083"
+        )
+    ]
+    cursor.executemany("""
+    INSERT INTO labor_offices (name_en, name_si, address_en, address_si, phone)
+    VALUES (?, ?, ?, ?, ?)
+    """, labor_offices_data)
         
     # Seed FAQ if empty
     cursor.execute("SELECT COUNT(*) FROM faq")
